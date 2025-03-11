@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% block title %}Edit Todo{% endblock %}
+
+{% block content %}
+<h2>Edit Todo</h2>
+<form method="post" action="{% url 'todo_update' todo.pk %}">
+    {% csrf_token %}
+    <div class="mb-3">
+        <label for="title" class="form-label">Title:</label>
+        <input type="text" class="form-control" id="title" name="title" value="{{ todo.title }}" required>
+    </div>
+    <div class="mb-3">
+        <label for="description" class="form-label">Description:</label>
+        <textarea class="form-control" id="description" name="description" required>{{ todo.description }}</textarea>
+    </div>
+    <div class="mb-3">
+        <label for="category" class="form-label">Category:</label>
+        <select class="form-control" id="category" name="category">
+            <option value="">No Category</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if todo.category.id == category.id %}selected{% endif %}>{{ category.name }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <button type="submit" class="btn btn-warning">Update</button>
+</form>
+{% endblock %}

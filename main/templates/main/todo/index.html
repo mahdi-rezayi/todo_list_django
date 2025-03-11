@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+    todo List
+{% endblock %}
+
+{% block content %}
+    <div class="w-100 d-flex justify-content-between">
+        <h2 style="width: max-content">todo List</h2>
+        <a href="{% url 'todo_create' %}" class="btn btn-primary mb-3">
+            Add New todo
+        </a>
+    </div>
+
+
+    <ul class="list-group">
+    {% for todo in todos %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            <div>
+                <strong>{{ todo.title }}</strong> - {{ todo.description }}
+                {% if todo.category %}
+                    <span class="badge bg-info">{{ todo.category.name }}</span>
+                {% endif %}
+                {% if todo.is_completed %}
+                    <span class="badge bg-success">Completed</span>
+                {% endif %}
+            </div>
+            <div>
+                {% if not todo.is_completed %}
+                    <form method="post" action="{% url 'todo_complete' todo.pk %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-sm btn-success">Complete</button>
+                    </form>
+                {% endif %}
+                <a href="{% url 'todo_edit' todo.pk %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'todo_delete' todo.pk %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </li>
+    {% endfor %}
+</ul>
+{% endblock %}
